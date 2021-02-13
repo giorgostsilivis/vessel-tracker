@@ -36,10 +36,12 @@
 
       <script>
          const output = document.querySelector("#output")
-         var PORTT = 8086;
-         name = window.location.hostname
+         // var PORTT = 8086;
+         // name = window.location.hostname
+         var HOST = location.origin.replace(/^http/, 'ws')
+         var ws = new WebSocket(HOST);
 
-         const ws = new WebSocket(`ws://${name}:${PORTT}`);
+         // const ws = new WebSocket(`ws://${name}:${PORTT}`);
          ws.addEventListener('open',()=>{
            console.log('connected!');
          })

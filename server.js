@@ -75,7 +75,8 @@ db.close((err) => {
 
 var PORTT = 8086;
 // var PORTT = 8086
-const wss = new ws.Server({port:PORTT});
+// const wss = new ws.Server({port:PORTT});
+const wss = new ws.Server({server});
 
 
 wss.on('connection', ws =>{
