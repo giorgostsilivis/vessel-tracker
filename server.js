@@ -4,43 +4,55 @@ const sqlite3 = require('sqlite3').verbose();
 const http = require('http');
 const url = require('url');
 const fs = require('fs');
+const express = require('express');
 
-const server = http.createServer((req,res) => {
-  let parsedURL = url.parse(req.url,true);
-  let path = parsedURL.path.replace(/^\/+|\/+$/g,"");
-  if (path ==""){
-    path = "index1.html";
-  }
-  console.log(`requested path ${path}`)
 
-  let file = __dirname + "/public/" +path;
-  fs.readFile(file,function(err,content){
-    if(err){
-      console.log(`file not found ${file}`);
-      res.writeHead(404);
-      res.end;
-    } else{
-      console.log(`returning ${path}`);
-      res.setHeader("X-Content-Type-Options","nosniff");
-      switch(path){
-        case "index1.html":
-           res.writeHead(200,{"Content-type": "text/html"});
-           break;
-        // case "style.css":
-        //    res.writeHead(200,{"Content-type": "text/css"});
-        // case "ship.webp":
-        //    res.writeHead(200,{"Content-type": "image"});
-      }
-      res.end(content);
-    }
-  });
-});
-var PORT = process.env.PORT || 8005;
-// var PORT = 8005;
-// server.listen(PORT, "0.0.0.0",()=> {
-server.listen(PORT,()=> {
-  console.log('listening on port 8005');
-})
+const PORT = process.env.PORT || 3000;
+const INDEX = '/public/index1.html';
+
+const server = express()
+  .use((req, res) => res.sendFile(INDEX, { root: __dirname }))
+  .listen(PORT, () => console.log(`Listening on ${PORT}`));
+
+
+
+
+// const server = http.createServer((req,res) => {
+//   let parsedURL = url.parse(req.url,true);
+//   let path = parsedURL.path.replace(/^\/+|\/+$/g,"");
+//   if (path ==""){
+//     path = "index1.html";
+//   }
+//   console.log(`requested path ${path}`)
+//
+//   let file = __dirname + "/public/" +path;
+//   fs.readFile(file,function(err,content){
+//     if(err){
+//       console.log(`file not found ${file}`);
+//       res.writeHead(404);
+//       res.end;
+//     } else{
+//       console.log(`returning ${path}`);
+//       res.setHeader("X-Content-Type-Options","nosniff");
+//       switch(path){
+//         case "index1.html":
+//            res.writeHead(200,{"Content-type": "text/html"});
+//            break;
+//         // case "style.css":
+//         //    res.writeHead(200,{"Content-type": "text/css"});
+//         // case "ship.webp":
+//         //    res.writeHead(200,{"Content-type": "image"});
+//       }
+//       res.end(content);
+//     }
+//   });
+// });
+// var PORT = process.env.PORT || 8005;
+// // var PORT = 8005;
+// // server.listen(PORT, "0.0.0.0",()=> {
+// server.listen(PORT,()=> {
+//   console.log('listening on port 8005');
+// })
 
 let db = new sqlite3.Database('thebase.db', (err) => {
   if (err) {
