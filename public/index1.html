@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>Vessel tracking</title>
+      <link rel = "stylesheet" href = "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css"/>
+      <link rel = "stylesheet" href = "https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css"/>
+      <link rel = "stylesheet" href = "https://cdn.datatables.net/colreorder/1.5.3/css/colReorder.dataTables.min.css"/>
+      <script src = "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+      <script src = "https://code.jquery.com/jquery-3.5.1.js"></script>
+      <script src = "https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+      <script src = "https://cdn.datatables.net/colreorder/1.5.3/js/dataTables.colReorder.min.js"></script>
+   </head>
+
+  <style>
+  body {
+    background-color: #6b8ba4;
+  }
+  .button {
+  background-color: darkgreen;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  }
+  </style>
+
+   <body>
+      <div id = "map" style = "width:100%; height:680px"></div>
+      <button class="button" id="resultArea" onclick='myf()'>Data Monitor</button>
+
+
+      <script>
+         const output = document.querySelector("#output")
+
+         const ws = new WebSocket('ws://localhost:8086');
+         ws.addEventListener('open',()=>{
+           console.log('connected!');
+         })
+
+         ws.addEventListener('message', e =>{
+           console.log(e);
+         })
+
+         var mapOptions = {
+            center: [37.983810, 23.727539],
+            zoom: 5
+         }
+         // Creating a map object
+         var map = new L.map('map', mapOptions);
+
+         var myIcon = L.icon({
+           iconUrl: 'ship.webp',
+           iconSize: [14,14]
+         });
+
+         // Creating a Layer object
+         var layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+
+         // Adding layer to the map
+         map.addLayer(layer);
+
+         function onClick(e){
+           alert(this.getLatLng());
+         }
+         var markers = {};
+         var lines = {};
+         var buffer = [];
+
+         // Creating a marker
+         ws.addEventListener('message', e => {
+             const data = e.data;
+             const ee = JSON.parse(data);
+
+             if (!markers[ee.imo]){
+               lines[ee.imo] = L.polyline([],{color:'red',weight: 3}).addTo(map);
+
+               markers[ee.imo] = L.marker([ee.latitude,ee.longitude],{icon:myIcon},{myCustomId: ee.imo}).bindPopup('id: '+ ee.imo + "<br>"+"ship_name:"+ ee.ship_name).on('contextmenu',onClick).addTo(map);
+             }
+             lines[ee.imo].addLatLng(L.latLng(ee.latitude,ee.longitude));
+             // map.on('contextmenu',onClick).removeLayer(lines[ee.imo]);
+             // lines[ee.imo].removeFrom(map).on('mouseover', onClick);
+             lines[ee.imo].on('click', function () {
+             map.removeLayer(lines[ee.imo]);
+             });
+
+             // map.on('contextmenu',onClick).removeLayer(lines[ee.imo])
+
+
+             markers[ee.imo].setLatLng([ee.latitude,ee.longitude],{myCustomId: ee.imo}).bindPopup('id: '+ ee.imo + "<br>"+"ship_name: "+ ee.ship_name).on('contextmenu',onClick);
+
+
+             //map.on('contextmenu',onClick).removeLayer(lines[ee.imo])
+
+             buffer.push([ee.imo,ee.ship_name,ee.latitude,ee.longitude,ee.draught,ee.course,ee.heading,ee.timestamp,ee.destination]);
+         });
+         function myf() {
+           var today = new Date();
+           var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+           var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+           var dateTime = date+' '+time;
+           document.getElementById('resultArea').innerHTML = `${"Last Date Refreshed"}${"<br>"}${dateTime}${"<br>"}${"Press to refresh again"}`
+             $(document).ready(function() {
+             var table = $('#example').DataTable( {
+                  paging: true,
+                  destroy:true,
+                  data: buffer,
+                  columns: [
+                      { title: "vessel-id" },
+                      { title: "ship_name" },
+                      { title: "latitude" },
+                      { title: "longitude" },
+                      { title: "draught" },
+                      { title: "course" },
+                      { title: "heading" },
+                      { title: "timestamp" },
+                      { title: "destination" }
+                ]
+             } );
+           } );
+       }
+      </script>
+      <table id="example" class="display" width="100%"></table>
+   </body>
+
+</html>
