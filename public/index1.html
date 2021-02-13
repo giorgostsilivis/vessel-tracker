@@ -36,7 +36,7 @@
 
       <script>
          const output = document.querySelector("#output")
-         var PORTT = process.env.PORT || 8086;
+         var PORTT = 8086;
          name = window.location.hostname
 
          const ws = new WebSocket(`ws://${name}:${PORTT}`);
