@@ -35,7 +35,8 @@ const server = http.createServer((req,res) => {
     }
   });
 });
-var PORT = process.env.PORT || 8005;
+// var PORT = process.env.PORT || 8005;
+var PORT = 8005;
 server.listen(PORT, "127.0.0.1",()=> {
   console.log('listening on port 8005');
 })
@@ -71,7 +72,8 @@ db.close((err) => {
   console.log('Closed the database connection.');
 });
 
-var PORTT = process.env.PORT || 8086;
+// var PORTT = process.env.PORT || 8086;
+var PORTT = 8086
 const wss = new ws.Server({port:PORTT});
 
 
