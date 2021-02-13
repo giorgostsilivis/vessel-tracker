@@ -38,7 +38,7 @@
          const output = document.querySelector("#output")
          var PORTT = process.env.PORT || 8086;
 
-         const ws = new WebSocket(`ws://localhost:${PORTT}`);
+         const ws = new WebSocket(`ws://window.location.hostname:${PORTT}`);
          ws.addEventListener('open',()=>{
            console.log('connected!');
          })

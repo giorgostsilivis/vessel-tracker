@@ -37,7 +37,7 @@ const server = http.createServer((req,res) => {
 });
 var PORT = process.env.PORT || 8005;
 // var PORT = 8005;
-server.listen(PORT, "127.0.0.1",()=> {
+server.listen(PORT, "0.0.0.0",()=> {
   console.log('listening on port 8005');
 })
 
