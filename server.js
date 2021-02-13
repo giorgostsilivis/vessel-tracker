@@ -72,8 +72,8 @@ db.close((err) => {
   console.log('Closed the database connection.');
 });
 
-// var PORTT = process.env.PORT || 8086;
-var PORTT = 8086
+var PORTT = process.env.PORT || 8086;
+// var PORTT = 8086
 const wss = new ws.Server({port:PORTT});
 
 
