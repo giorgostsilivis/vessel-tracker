@@ -4,7 +4,7 @@ const sqlite3 = require('sqlite3').verbose();
 const http = require('http');
 const url = require('url');
 const fs = require('fs');
-const express = require('express');
+// const express = require('express');
 
 
 // const PORT = process.env.PORT || 3000;
@@ -120,7 +120,7 @@ wss.on('connection', ws =>{
       let counter = 0
       // sleep(5000)
       //371585
-      for (let i = 0; i < 24000; i++) {
+      for (let i = 0; i < 60000; i++) {
           ws.send(JSON.stringify(rowarray[i]));
           // console.log(counter);
           counter++;
