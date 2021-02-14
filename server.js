@@ -120,12 +120,12 @@ wss.on('connection', ws =>{
       let counter = 0
       // sleep(5000)
       //371585
-      for (let i = 0; i < 60000; i++) {
+      for (let i = 0; i < 30000; i++) {
           ws.send(JSON.stringify(rowarray[i]));
           // console.log(counter);
           counter++;
           if(counter % 60 === 0){
-            await sleep(2000);
+            await sleep(1000);
           }
       }
     }
