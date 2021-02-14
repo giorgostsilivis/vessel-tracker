@@ -86,7 +86,7 @@
              const ee = JSON.parse(data);
 
              if (!markers[ee.imo]){
-               lines[ee.imo] = L.polyline([],{color:'red',weight: 3}).addTo(map);
+               lines[ee.imo] = L.polyline([],{color:'brown',weight: 2}).addTo(map);
 
                markers[ee.imo] = L.marker([ee.latitude,ee.longitude],{icon:myIcon},{myCustomId: ee.imo}).bindPopup('id: '+ ee.imo + "<br>"+"ship_name:"+ ee.ship_name).on('contextmenu',onClick).addTo(map);
              }
