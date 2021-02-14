@@ -66,19 +66,32 @@ let db = new sqlite3.Database('thebase.db', (err) => {
 });
 
 let rowarray = [];
-for (i = 1; i < 24000; i++) {
+for (i = 1; i < 371585; i++) {
   let sql = `SELECT * FROM day WHERE rowid = ${i}`;
-  db.all(sql, [], (err, rows) => {
+
+  db.each(sql,
+  (error, row) => {
+  /*gets called for every row our query returns*/
     //console.log(rows)
-    if (err) {
-      throw err;
+    if (error) {
+      throw error;
     }
-    rows.forEach((row) => {
-      //console.log(row);
-      rowarray.push(row);
-      //console.log(rowarray);
-    });
+    rowarray.push(row);
+
+
   });
+
+  // db.all(sql, [], (err, rows) => {
+  //   //console.log(rows)
+  //   if (err) {
+  //     throw err;
+  //   }
+  //   rows.forEach((row) => {
+  //     //console.log(row);
+  //     rowarray.push(row);
+  //     //console.log(rowarray);
+  //   });
+  // });
 
 }
 
@@ -120,7 +133,7 @@ wss.on('connection', ws =>{
       let counter = 0
       // sleep(5000)
       //371585
-      for (let i = 0; i < 30000; i++) {
+      for (let i = 0; i < 371585; i++) {
           ws.send(JSON.stringify(rowarray[i]));
           // console.log(counter);
           counter++;
