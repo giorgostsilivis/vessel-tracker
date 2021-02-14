@@ -66,7 +66,7 @@ let db = new sqlite3.Database('thebase.db', (err) => {
 });
 
 let rowarray = [];
-for (i = 1; i < 371585; i++) {
+for (i = 1; i < 30000; i++) {
   let sql = `SELECT * FROM day WHERE rowid = ${i}`;
 
   db.each(sql,
@@ -133,7 +133,7 @@ wss.on('connection', ws =>{
       let counter = 0
       // sleep(5000)
       //371585
-      for (let i = 0; i < 371585; i++) {
+      for (let i = 0; i < 30000; i++) {
           ws.send(JSON.stringify(rowarray[i]));
           // console.log(counter);
           counter++;
