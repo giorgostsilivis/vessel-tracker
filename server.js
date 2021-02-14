@@ -66,7 +66,7 @@ let db = new sqlite3.Database('thebase.db', (err) => {
 });
 
 let rowarray = [];
-for (i = 1; i < 2000; i++) {
+for (i = 1; i < 12000; i++) {
   let sql = `SELECT * FROM day WHERE rowid = ${i}`;
   db.all(sql, [], (err, rows) => {
     //console.log(rows)
@@ -124,7 +124,7 @@ wss.on('connection', ws =>{
           // console.log(counter);
           counter++;
           if(counter % 60 === 0){
-            await sleep(3000);
+            await sleep(2000);
           }
       }
     }
